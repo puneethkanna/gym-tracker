@@ -16,6 +16,7 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
   const [weight, setWeight] = useState('');
   const [gymTag, setGymTag] = useState('');
   const [workoutDate, setWorkoutDate] = useState(new Date().toISOString().split('T')[0]);
+  const [session, setSession] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [showDetails, setShowDetails] = useState(false);
@@ -72,6 +73,7 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
         weight: parseFloat(weight) || 0,
         date: new Date(workoutDate + 'T' + new Date().toTimeString().slice(0,8)),
         gymTag: gymTag.trim() || undefined,
+        session,
       });
 
       setExercise('');
@@ -80,6 +82,7 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
       setWeight('');
       setGymTag('');
       setWorkoutDate(new Date().toISOString().split('T')[0]);
+      setSession(1);
       setShowDetails(false);
       onSuccess?.();
     } catch {
@@ -180,12 +183,26 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
 
         {showDetails && (
           <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-            <input
-              type="date"
-              value={workoutDate}
-              onChange={(e) => setWorkoutDate(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
-            />
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <input
+                  type="date"
+                  value={workoutDate}
+                  onChange={(e) => setWorkoutDate(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={session}
+                  onChange={(e) => setSession(parseInt(e.target.value))}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
+                >
+                  <option value={1}>Session 1 (Morning)</option>
+                  <option value={2}>Session 2 (Evening)</option>
+                </select>
+              </div>
+            </div>
             <input
               type="text"
               value={gymTag}

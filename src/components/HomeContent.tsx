@@ -17,10 +17,26 @@ export default function HomeContent() {
   const [showForm, setShowForm] = useState(false);
   const { today, yesterday } = useMemo(() => getDates(), []);
 
+  const totalSessions = useMemo(() => {
+    const sessions = new Set<string>();
+    workouts.forEach(w => {
+      const d = new Date(w.date);
+      sessions.add(`${d.toDateString()}-${w.session}`);
+    });
+    return sessions.size;
+  }, [workouts]);
+
   const thisWeekWorkouts = useMemo(() => {
     const now = new Date();
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    return workouts.filter(w => new Date(w.date) >= weekAgo).length;
+    const sessions = new Set<string>();
+    workouts.forEach(w => {
+      if (new Date(w.date) >= weekAgo) {
+        const d = new Date(w.date);
+        sessions.add(`${d.toDateString()}-${w.session}`);
+      }
+    });
+    return sessions.size;
   }, [workouts]);
 
   const totalVolume = useMemo(() => {
@@ -81,8 +97,8 @@ export default function HomeContent() {
             </div>
           </div>
           <div className="text-right">
-            <p className="font-condensed text-2xl font-bold text-primary">{workouts.length}</p>
-            <p className="text-[10px] text-muted uppercase tracking-wider">Workouts</p>
+            <p className="font-condensed text-2xl font-bold text-primary">{totalSessions}</p>
+            <p className="text-[10px] text-muted uppercase tracking-wider">Sessions</p>
           </div>
         </div>
       </header>

@@ -96,6 +96,7 @@ export interface Workout {
   weight: number;
   date: Date;
   gymTag?: string;
+  session: number;
 }
 
 export interface Palette {
@@ -122,10 +123,16 @@ const db = new Dexie('GymTrackerDB') as Dexie & {
   gyms: EntityTable<Gym, 'id'>;
 };
 
-db.version(2).stores({
-  workouts: '++id, exercise, date, gymTag',
+db.version(4).stores({
+  workouts: '++id, exercise, date, gymTag, session',
   palettes: '++id, name, isDefault',
   gyms: '++id, name',
+}).upgrade(tx => {
+  return tx.table('workouts').toCollection().modify(workout => {
+    if (workout.session === undefined) {
+      workout.session = Math.random() < 0.5 ? 1 : 2;
+    }
+  });
 });
 
 export const defaultPalettes: Palette[] = [

@@ -7,6 +7,16 @@ async function initializePalettes() {
   const existing = await db.palettes.count();
   if (existing === 0) {
     await db.palettes.bulkAdd(defaultPalettes);
+  } else {
+    const names = new Set<string>();
+    const allPalettes = await db.palettes.toArray();
+    for (const p of allPalettes) {
+      if (names.has(p.name)) {
+        await db.palettes.delete(p.id!);
+      } else {
+        names.add(p.name);
+      }
+    }
   }
 }
 

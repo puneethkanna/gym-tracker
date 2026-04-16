@@ -5,9 +5,11 @@ import { BottomNav } from '@/components/BottomNav';
 import { ServiceWorkerRegistration } from '@/components/ServiceWorkerRegistration';
 import { useMemo } from 'react';
 import { muscleGroupLabels, type MuscleGroup } from '@/lib/db';
+import { useRouter } from 'next/navigation';
 
 export default function AnalyticsPage() {
   const { workouts, isLoading } = useWorkouts();
+  const router = useRouter();
 
   const stats = useMemo(() => {
     if (workouts.length === 0) {
@@ -18,6 +20,7 @@ export default function AnalyticsPage() {
         mostFrequent: null,
         muscleBreakdown: {},
         weeklyData: [],
+        dailyData: [],
       };
     }
 
@@ -25,6 +28,7 @@ export default function AnalyticsPage() {
     const exerciseCounts: Record<string, number> = {};
     const muscleCounts: Record<string, number> = {};
     const weeklyWorkouts: Record<string, number> = {};
+    const dailyWorkouts: Record<string, { count: number; sessions: number[] }> = {};
 
     workouts.forEach(w => {
       exerciseCounts[w.exercise] = (exerciseCounts[w.exercise] || 0) + 1;
@@ -35,12 +39,22 @@ export default function AnalyticsPage() {
 
       const weekKey = getWeekKey(new Date(w.date));
       weeklyWorkouts[weekKey] = (weeklyWorkouts[weekKey] || 0) + 1;
+
+      const dayKey = new Date(w.date).toISOString().split('T')[0];
+      if (!dailyWorkouts[dayKey]) {
+        dailyWorkouts[dayKey] = { count: 0, sessions: [] };
+      }
+      dailyWorkouts[dayKey].count++;
+      if (!dailyWorkouts[dayKey].sessions.includes(w.session)) {
+        dailyWorkouts[dayKey].sessions.push(w.session);
+      }
     });
 
     const mostFrequent = Object.entries(exerciseCounts)
       .sort((a, b) => b[1] - a[1])[0];
 
     const weeklyData = getLast4WeeksWeekly(weeklyWorkouts);
+    const dailyData = getCurrentWeekDaily(dailyWorkouts);
 
     return {
       totalWorkouts: workouts.length,
@@ -49,6 +63,7 @@ export default function AnalyticsPage() {
       mostFrequent: mostFrequent ? { name: mostFrequent[0], count: mostFrequent[1] } : null,
       muscleBreakdown: muscleCounts,
       weeklyData,
+      dailyData,
     };
   }, [workouts]);
 
@@ -120,20 +135,26 @@ export default function AnalyticsPage() {
             <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
               <h2 className="font-condensed text-sm font-semibold text-muted uppercase tracking-wider mb-4">Weekly Activity</h2>
               <div className="flex items-end justify-between h-32 gap-2">
-                {stats.weeklyData.map((week, i) => {
-                  const max = Math.max(...stats.weeklyData.map(w => w.count), 1);
-                  const height = max > 0 ? (week.count / max) * 100 : 0;
+                {stats.dailyData.map((day, i) => {
+                  const max = Math.max(...stats.dailyData.map(d => d.count), 1);
+                  const height = max > 0 ? (day.count / max) * 100 : 0;
+                  const hasWorkouts = day.count > 0;
                   return (
-                    <div key={i} className="flex-1 flex flex-col items-center">
+                    <button
+                      key={i}
+                      onClick={() => hasWorkouts && router.push(`/analytics/day/${day.date}`)}
+                      disabled={!hasWorkouts}
+                      className={`flex-1 flex flex-col items-center ${hasWorkouts ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}
+                    >
                       <div className="w-full relative" style={{ height: '100px' }}>
                         <div 
-                          className="absolute bottom-0 w-full rounded-t-md bg-primary transition-all duration-500"
-                          style={{ height: `${height}%`, minHeight: week.count > 0 ? '8px' : '2px' }}
+                          className={`absolute bottom-0 w-full rounded-t-md transition-all duration-500 ${hasWorkouts ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'}`}
+                          style={{ height: `${height}%`, minHeight: day.count > 0 ? '8px' : '2px' }}
                         />
                       </div>
-                      <p className="text-[10px] text-muted mt-2">{week.label}</p>
-                      <p className="text-xs font-semibold text-foreground">{week.count}</p>
-                    </div>
+                      <p className="text-[10px] text-muted mt-2">{day.label}</p>
+                      <p className="text-xs font-semibold text-foreground">{day.count}</p>
+                    </button>
                   );
                 })}
               </div>
@@ -225,4 +246,24 @@ function getLast4WeeksWeekly(weeklyWorkouts: Record<string, number>) {
   }
   
   return weeks;
+}
+
+function getCurrentWeekDaily(dailyWorkouts: Record<string, { count: number; sessions: number[] }>) {
+  const days: { label: string; count: number; date: string }[] = [];
+  const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const now = new Date();
+  const currentDay = now.getDay();
+  
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - currentDay + i);
+    const dateKey = date.toISOString().split('T')[0];
+    days.push({
+      label: dayLabels[i],
+      count: dailyWorkouts[dateKey]?.count || 0,
+      date: dateKey,
+    });
+  }
+  
+  return days;
 }
