@@ -9,6 +9,7 @@ export interface Exercise {
   name: string;
   muscleGroups: MuscleGroup[];
   equipment: string[];
+  icon?: string;
 }
 
 export const exerciseLibrary: Exercise[] = [
