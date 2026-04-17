@@ -6,7 +6,7 @@ import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistratio
 export const metadata: Metadata = {
   title: "Gym Tracker",
   description: "Track your workouts offline",
-  manifest: "/manifest.json",
+  manifest: "/gym-tracker/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

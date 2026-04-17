@@ -1,12 +1,12 @@
 const CACHE_NAME = 'gym-tracker-v1';
 
 const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/icon-192.svg',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/favicon.ico',
+  '/gym-tracker/',
+  '/gym-tracker/manifest.json',
+  '/gym-tracker/icon-192.svg',
+  '/gym-tracker/icon-192.png',
+  '/gym-tracker/icon-512.png',
+  '/gym-tracker/favicon.ico',
 ];
 
 const STATIC_CACHE_NAME = 'gym-tracker-static-v1';
