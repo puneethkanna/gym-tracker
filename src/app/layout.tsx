@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { PaletteProvider } from "@/components/PaletteProvider";
 
 export const metadata: Metadata = {
   title: "Gym Tracker",
@@ -16,7 +17,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#F97316",
+  themeColor: "var(--md-sys-color-primary)",
 };
 
 export default function RootLayout({
@@ -26,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      <body className="min-h-full" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+        <PaletteProvider />
+        {children}
+      </body>
     </html>
   );
 }

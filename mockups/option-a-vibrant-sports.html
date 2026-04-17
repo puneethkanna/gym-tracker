@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Tracker - Option A: Vibrant Sports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#F97316',
+            secondary: '#FB923C',
+            cta: '#22C55E',
+            dark: '#1F2937',
+            darker: '#111827'
+          },
+          fontFamily: {
+            heading: ['Barlow Condensed', 'sans-serif'],
+            body: ['Barlow', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-darker text-slate-50 font-body min-h-screen">
+  <!-- App Container -->
+  <div class="max-w-md mx-auto min-h-screen bg-dark relative">
+    <!-- Header -->
+    <header class="p-6 pb-4">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="font-heading text-3xl font-bold tracking-wide">GYM<span class="text-primary">TRACKER</span></h1>
+        <button class="w-10 h-10 rounded-full bg-darker flex items-center justify-center border border-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+      </div>
+      <!-- Stats Row -->
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-darker rounded-2xl p-4 text-center border border-slate-700">
+          <div class="text-2xl font-heading font-bold text-primary">12</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">Workouts</div>
+        </div>
+        <div class="bg-darker rounded-2xl p-4 text-center border border-slate-700">
+          <div class="text-2xl font-heading font-bold text-cta">2.5k</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">Calories</div>
+        </div>
+        <div class="bg-darker rounded-2xl p-4 text-center border border-slate-700">
+          <div class="text-2xl font-heading font-bold text-white">45m</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">Avg Time</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Quick Add Button -->
+    <div class="px-6 mb-6">
+      <button class="w-full bg-primary hover:bg-orange-500 text-white font-heading font-bold text-xl py-4 rounded-2xl flex items-center justify-center gap-3 transition-all duration-200 shadow-lg shadow-orange-500/30">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        LOG WORKOUT
+      </button>
+    </div>
+
+    <!-- Recent Workouts -->
+    <section class="px-6 pb-24">
+      <h2 class="font-heading text-xl font-semibold mb-4 flex items-center gap-2">
+        <span class="w-1 h-6 bg-primary rounded-full"></span>
+        RECENT WORKOUTS
+      </h2>
+      <div class="space-y-4">
+        <!-- Workout Card 1 -->
+        <div class="bg-darker rounded-2xl p-5 border border-slate-700 hover:border-primary transition-colors cursor-pointer">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="font-heading font-bold text-lg">Push Day</h3>
+              <p class="text-sm text-slate-400">Chest, Shoulders, Triceps</p>
+            </div>
+            <span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">Today</span>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <span class="text-slate-300">6 sets</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-slate-300">52 min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workout Card 2 -->
+        <div class="bg-darker rounded-2xl p-5 border border-slate-700 hover:border-primary transition-colors cursor-pointer">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="font-heading font-bold text-lg">Pull Day</h3>
+              <p class="text-sm text-slate-400">Back, Biceps</p>
+            </div>
+            <span class="text-xs bg-slate-600 text-slate-300 px-2 py-1 rounded-full">Yesterday</span>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <span class="text-slate-300">5 sets</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-slate-300">45 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-dark border-t border-slate-700 p-4">
+      <div class="max-w-md mx-auto flex justify-around">
+        <button class="flex flex-col items-center gap-1 text-primary">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          <span class="text-xs font-heading">Home</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="text-xs font-heading">Stats</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span class="text-xs font-heading">History</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          <span class="text-xs font-heading">Settings</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Palette Selector Floating -->
+  <div class="fixed top-20 right-4 z-50">
+    <button class="w-12 h-12 rounded-full bg-cta flex items-center justify-center shadow-lg">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+    </button>
+  </div>
+</body>
+</html>

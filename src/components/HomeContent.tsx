@@ -12,6 +12,13 @@ function getDates() {
   return { today: now.toDateString(), yesterday: new Date(now.getTime() - 86400000).toDateString() };
 }
 
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
 export default function HomeContent() {
   const { workouts } = useWorkouts();
   const [showForm, setShowForm] = useState(false);
@@ -79,100 +86,100 @@ export default function HomeContent() {
   }, [workouts, today, yesterday]);
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-20" style={{ backgroundColor: 'var(--background)' }}>
       <ServiceWorkerRegistration />
       
-      {/* Floating Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/10">
-        <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-pulse-glow">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-              </svg>
+      <header className="fixed top-0 left-0 right-0 z-40 glass h-16" style={{ backgroundColor: 'var(--glass-bg)' }}>
+        <div className="max-w-md mx-auto px-4 h-full flex items-center">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ backgroundColor: 'var(--primary)' }}>
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs" style={{ color: 'var(--muted)' }}>{getGreeting()}</p>
+                <h1 className="text-xl font-bold tracking-wide" style={{ color: 'var(--foreground)', fontFamily: 'var(--md-sys-typescale-title-large-font)' }}>GYM TRACKER</h1>
+              </div>
             </div>
-            <div>
-              <h1 className="font-condensed text-xl font-bold text-foreground tracking-wide">GYM TRACKER</h1>
-              <p className="text-xs text-muted">Track your progress</p>
+            <div className="text-right">
+              <p className="text-2xl font-bold" style={{ color: 'var(--primary)' }}>{totalSessions}</p>
+              <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Sessions</p>
             </div>
-          </div>
-          <div className="text-right">
-            <p className="font-condensed text-2xl font-bold text-primary">{totalSessions}</p>
-            <p className="text-[10px] text-muted uppercase tracking-wider">Sessions</p>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="pt-20 px-4 pb-4 max-w-md mx-auto space-y-4">
-        {/* Stats Cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50 animate-fade-in stagger-1">
+          <div className="p-4 rounded-3xl border border-[var(--md-sys-color-outline-variant)]" style={{ backgroundColor: 'var(--surface-container-high)' }}>
             <div className="flex items-center gap-1.5 mb-1">
-              <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" style={{ color: 'var(--primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-[10px] text-muted uppercase tracking-wide font-medium">This Week</p>
+              <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>This Week</p>
             </div>
-            <p className="font-condensed text-3xl font-bold text-foreground">{thisWeekWorkouts}</p>
-            <p className="text-[10px] text-muted">sessions</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>{thisWeekWorkouts}</p>
+            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>sessions</p>
           </div>
           
-          <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50 animate-fade-in stagger-2">
+          <div className="p-4 rounded-3xl border border-[var(--md-sys-color-outline-variant)]" style={{ backgroundColor: 'var(--surface-container-high)' }}>
             <div className="flex items-center gap-1.5 mb-1">
-              <svg className="w-3.5 h-3.5 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" style={{ color: 'var(--secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
-              <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Volume</p>
+              <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Volume</p>
             </div>
-            <p className="font-condensed text-3xl font-bold text-foreground">
+            <p className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>
               {totalVolume > 1000 ? `${(totalVolume / 1000).toFixed(1)}k` : totalVolume}
             </p>
-            <p className="text-[10px] text-muted">kg lifted</p>
+            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>kg lifted</p>
           </div>
           
-          <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50 animate-fade-in stagger-3">
+          <div className="p-4 rounded-3xl border border-[var(--md-sys-color-outline-variant)]" style={{ backgroundColor: 'var(--surface-container-high)' }}>
             <div className="flex items-center gap-1.5 mb-1">
-              <svg className="w-3.5 h-3.5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" style={{ color: 'var(--tertiary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
               </svg>
-              <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Streak</p>
+              <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Streak</p>
             </div>
-            <p className="font-condensed text-3xl font-bold text-foreground">{streak}</p>
-            <p className="text-[10px] text-muted">days</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>{streak}</p>
+            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>days</p>
           </div>
         </div>
 
-        {/* Workout Form Card */}
-        <div className="bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 overflow-hidden animate-slide-up stagger-2">
+        <div className="rounded-3xl border border-[var(--md-sys-color-outline-variant)] overflow-hidden" style={{ backgroundColor: 'var(--surface)' }}>
           {!showForm ? (
             <button
               onClick={() => setShowForm(true)}
-              className="w-full p-4 flex items-center gap-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer"
+              className="w-full p-5 flex items-center gap-4 text-left transition-colors cursor-pointer hover:opacity-90"
+              style={{ backgroundColor: 'var(--surface-container-low)' }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: 'var(--primary-container)' }}>
+                <svg className="w-7 h-7" style={{ color: 'var(--primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </div>
               <div className="flex-1">
-                <p className="font-condensed text-lg font-semibold text-foreground">Log Workout</p>
-                <p className="text-xs text-muted">Add your sets, reps & weight</p>
+                <p className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Log Workout</p>
+                <p className="text-sm" style={{ color: 'var(--muted)' }}>Add your sets, reps & weight</p>
               </div>
-              <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" style={{ color: 'var(--muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           ) : (
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="font-condensed text-lg font-semibold text-foreground">Log Workout</p>
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Log Workout</p>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl transition-colors cursor-pointer"
+                  style={{ backgroundColor: 'transparent' }}
                 >
-                  <svg className="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" style={{ color: 'var(--muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -182,8 +189,7 @@ export default function HomeContent() {
           )}
         </div>
 
-        {/* Recent Workouts */}
-        <div className="bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 overflow-hidden animate-slide-up stagger-3">
+        <div className="rounded-3xl border border-[var(--md-sys-color-outline-variant)] overflow-hidden" style={{ backgroundColor: 'var(--surface)' }}>
           <WorkoutList today={today} yesterday={yesterday} />
         </div>
       </main>

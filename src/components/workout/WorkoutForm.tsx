@@ -21,7 +21,7 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
   const [error, setError] = useState('');
   const [showDetails, setShowDetails] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [filteredExercises, setFilteredExercises] = useState(exerciseLibrary);
+  const [filteredExercises, setFilteredExercises] = useState(exerciseLibrary.slice(0, 10));
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -93,14 +93,14 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="p-3 text-sm bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl border border-red-100 dark:border-red-900/30">
+        <div className="p-3 text-sm rounded-xl border" style={{ backgroundColor: 'var(--error-container)', color: 'var(--error)', borderColor: 'var(--error)' }}>
           {error}
         </div>
       )}
 
-      <div className="space-y-2" ref={dropdownRef}>
+      <div className="space-y-3" ref={dropdownRef}>
         <div className="relative">
           <input
             type="text"
@@ -111,14 +111,19 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
             }}
             onFocus={() => setShowDropdown(filteredExercises.length > 0)}
             placeholder="Search exercise..."
-            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white dark:focus:bg-gray-700 transition-all cursor-pointer"
+            className="w-full px-4 py-3 rounded-xl text-sm transition-all cursor-pointer"
+            style={{ 
+              backgroundColor: 'var(--surface-container-high)', 
+              border: '1px solid var(--outline)',
+              color: 'var(--foreground)'
+            }}
           />
-          <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" style={{ color: 'var(--muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           
           {showDropdown && filteredExercises.length > 0 && (
-            <div className="absolute z-30 w-full mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 max-h-48 overflow-y-auto">
+            <div className="absolute z-50 w-full mt-2 rounded-xl shadow-lg border overflow-y-auto max-h-48" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--outline-variant)' }}>
               {filteredExercises.slice(0, 8).map((ex) => (
                 <button
                   key={ex.name}
@@ -127,10 +132,13 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
                     setExercise(ex.name);
                     setShowDropdown(false);
                   }}
-                  className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex justify-between items-center cursor-pointer transition-colors"
+                  className="w-full px-4 py-3 text-left text-sm flex justify-between items-center cursor-pointer transition-colors border-b"
+                  style={{ borderColor: 'var(--outline-variant)' }}
                 >
-                  <span className="font-medium text-foreground">{ex.name}</span>
-                  <span className="text-xs text-muted capitalize">{ex.muscleGroups[0]}</span>
+                  <span className="font-medium" style={{ color: 'var(--foreground)' }}>{ex.name}</span>
+                  <span className="text-xs capitalize rounded-full px-2 py-0.5" style={{ backgroundColor: 'var(--surface-container-high)', color: 'var(--muted)' }}>
+                    {ex.muscleGroups[0]}
+                  </span>
                 </button>
               ))}
             </div>
@@ -141,75 +149,114 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
           <div className="relative">
             <input
               type="number"
+              inputMode="numeric"
               value={sets}
               onChange={(e) => setSets(e.target.value)}
               placeholder="0"
-              className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-center font-condensed text-lg font-semibold cursor-pointer"
+              className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
+              style={{ 
+                backgroundColor: 'var(--surface-container-high)', 
+                border: '1px solid var(--outline)',
+                color: 'var(--foreground)'
+              }}
             />
-            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted uppercase tracking-wide">sets</span>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>sets</span>
           </div>
           <div className="relative">
             <input
               type="number"
+              inputMode="numeric"
               value={reps}
               onChange={(e) => setReps(e.target.value)}
               placeholder="0"
-              className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-center font-condensed text-lg font-semibold cursor-pointer"
+              className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
+              style={{ 
+                backgroundColor: 'var(--surface-container-high)', 
+                border: '1px solid var(--outline)',
+                color: 'var(--foreground)'
+              }}
             />
-            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted uppercase tracking-wide">reps</span>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>reps</span>
           </div>
           <div className="relative">
             <input
               type="number"
+              inputMode="decimal"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               placeholder="0"
-              className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-center font-condensed text-lg font-semibold cursor-pointer"
+              className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
+              style={{ 
+                backgroundColor: 'var(--surface-container-high)', 
+                border: '1px solid var(--outline)',
+                color: 'var(--foreground)'
+              }}
             />
-            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted uppercase tracking-wide">kg</span>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>kg</span>
           </div>
         </div>
 
         <button
           type="button"
           onClick={() => setShowDetails(!showDetails)}
-          className="text-xs text-muted hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
+          className="text-sm flex items-center gap-2 transition-colors cursor-pointer"
+          style={{ color: 'var(--muted)' }}
         >
-          <svg className={`w-3 h-3 transition-transform ${showDetails ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-4 h-4 transition-transform ${showDetails ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
           {showDetails ? 'Less' : 'More'} details
         </button>
 
         {showDetails && (
-          <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-            <div className="flex gap-2">
-              <div className="flex-1">
+          <div className="space-y-3 pt-2 border-t" style={{ borderColor: 'var(--outline-variant)' }}>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--muted)' }}>Date</label>
                 <input
                   type="date"
                   value={workoutDate}
                   onChange={(e) => setWorkoutDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl text-sm cursor-pointer"
+                  style={{ 
+                    backgroundColor: 'var(--surface-container-high)', 
+                    border: '1px solid var(--outline)',
+                    color: 'var(--foreground)'
+                  }}
                 />
               </div>
-              <div className="w-32">
+              <div>
+                <label className="block text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--muted)' }}>Session</label>
                 <select
                   value={session}
                   onChange={(e) => setSession(parseInt(e.target.value))}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl text-sm cursor-pointer"
+                  style={{ 
+                    backgroundColor: 'var(--surface-container-high)', 
+                    border: '1px solid var(--outline)',
+                    color: 'var(--foreground)'
+                  }}
                 >
-                  <option value={1}>Session 1 (Morning)</option>
-                  <option value={2}>Session 2 (Evening)</option>
+                  <option value={1}>Morning</option>
+                  <option value={2}>Evening</option>
                 </select>
               </div>
             </div>
-            <input
-              type="text"
-              value={gymTag}
-              onChange={(e) => setGymTag(e.target.value)}
-              placeholder="Gym location (optional)"
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border-0 rounded-xl text-sm cursor-pointer"
-            />
+            <div>
+              <label className="block text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--muted)' }}>Gym Location</label>
+              <input
+                type="text"
+                value={gymTag}
+                onChange={(e) => setGymTag(e.target.value)}
+                placeholder="e.g., Gold's Gym"
+                className="w-full px-4 py-3 rounded-xl text-sm cursor-pointer"
+                style={{ 
+                  backgroundColor: 'var(--surface-container-high)', 
+                  border: '1px solid var(--outline)',
+                  color: 'var(--foreground)'
+                }}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -217,24 +264,27 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-3 px-4 font-condensed text-base font-semibold text-white rounded-xl transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        style={{ backgroundColor: 'var(--primary, #F97316)' }}
+        className="w-full py-4 px-4 font-semibold rounded-xl transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
+        style={{ 
+          backgroundColor: 'var(--primary)', 
+          color: 'var(--on-primary)'
+        }}
       >
         {isSubmitting ? (
-          <span className="flex items-center justify-center gap-2">
+          <>
             <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
             </svg>
             Saving...
-          </span>
+          </>
         ) : (
-          <span className="flex items-center justify-center gap-2">
+          <>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Log Workout
-          </span>
+          </>
         )}
       </button>
     </form>

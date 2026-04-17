@@ -84,56 +84,56 @@ export default function AnalyticsPage() {
     <div className="min-h-screen pb-20">
       <ServiceWorkerRegistration />
       
-      <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/10">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <h1 className="font-condensed text-xl font-bold text-foreground tracking-wide">ANALYTICS</h1>
-          <p className="text-xs text-muted">Track your progress</p>
+      <header className="fixed top-0 left-0 right-0 z-40 glass h-16" style={{ backgroundColor: 'var(--glass-bg)', borderBottom: '1px solid var(--md-sys-color-outline-variant)' }}>
+        <div className="max-w-md mx-auto px-4 h-full flex flex-col justify-center">
+          <h1 className="text-xl font-bold tracking-wide" style={{ color: 'var(--foreground)', fontFamily: 'var(--md-sys-typescale-title-large-font)' }}>ANALYTICS</h1>
+          <p className="text-xs" style={{ color: 'var(--muted)' }}>Track your progress</p>
         </div>
       </header>
 
       <main className="pt-16 px-4 pb-4 max-w-md mx-auto space-y-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }} />
           </div>
         ) : workouts.length === 0 ? (
-          <div className="bg-card rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700/50">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-              <svg className="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="rounded-3xl p-8 text-center border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--outline-variant)' }}>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: 'var(--surface-container-high)' }}>
+              <svg className="w-8 h-8" style={{ color: 'var(--muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
-            <p className="font-condensed text-lg font-semibold text-foreground">No data yet</p>
-            <p className="text-sm text-muted mt-1">Start logging workouts to see analytics!</p>
+            <p className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>No data yet</p>
+            <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>Start logging workouts to see analytics!</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-                <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Total Workouts</p>
-                <p className="font-condensed text-3xl font-bold text-primary mt-1">{stats.totalWorkouts}</p>
+              <div className="p-4 rounded-3xl border" style={{ backgroundColor: 'var(--surface-container-high)', borderColor: 'var(--outline-variant)' }}>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Total Workouts</p>
+                <p className="text-3xl font-bold mt-1" style={{ color: 'var(--primary)' }}>{stats.totalWorkouts}</p>
               </div>
-              <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-                <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Total Volume</p>
-                <p className="font-condensed text-3xl font-bold text-foreground mt-1">
+              <div className="p-4 rounded-3xl border" style={{ backgroundColor: 'var(--surface-container-high)', borderColor: 'var(--outline-variant)' }}>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Total Volume</p>
+                <p className="text-3xl font-bold mt-1" style={{ color: 'var(--foreground)' }}>
                   {stats.totalVolume > 1000 ? `${(stats.totalVolume / 1000).toFixed(1)}k` : stats.totalVolume}
                 </p>
-                <p className="text-[10px] text-muted">kg</p>
+                <p className="text-[10px]" style={{ color: 'var(--muted)' }}>kg</p>
               </div>
-              <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-                <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Avg Volume/Session</p>
-                <p className="font-condensed text-3xl font-bold text-foreground mt-1">{stats.avgVolume}</p>
-                <p className="text-[10px] text-muted">kg</p>
+              <div className="p-4 rounded-3xl border" style={{ backgroundColor: 'var(--surface-container-high)', borderColor: 'var(--outline-variant)' }}>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Avg Volume/Session</p>
+                <p className="text-3xl font-bold mt-1" style={{ color: 'var(--foreground)' }}>{stats.avgVolume}</p>
+                <p className="text-[10px]" style={{ color: 'var(--muted)' }}>kg</p>
               </div>
-              <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-                <p className="text-[10px] text-muted uppercase tracking-wide font-medium">Favorite</p>
-                <p className="font-condensed text-lg font-bold text-foreground mt-1 truncate">{stats.mostFrequent?.name || '-'}</p>
-                <p className="text-[10px] text-muted">{stats.mostFrequent?.count || 0} sessions</p>
+              <div className="p-4 rounded-3xl border" style={{ backgroundColor: 'var(--surface-container-high)', borderColor: 'var(--outline-variant)' }}>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--muted)' }}>Favorite</p>
+                <p className="text-lg font-bold mt-1 truncate" style={{ color: 'var(--foreground)' }}>{stats.mostFrequent?.name || '-'}</p>
+                <p className="text-[10px]" style={{ color: 'var(--muted)' }}>{stats.mostFrequent?.count || 0} sessions</p>
               </div>
             </div>
 
-            <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-              <h2 className="font-condensed text-sm font-semibold text-muted uppercase tracking-wider mb-4">Weekly Activity</h2>
+            <div className="p-4 rounded-3xl border" style={{ backgroundColor: 'var(--surface-container-high)', borderColor: 'var(--outline-variant)' }}>
+              <h2 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--muted)' }}>Weekly Activity</h2>
               <div className="flex items-end justify-between h-32 gap-2">
                 {stats.dailyData.map((day, i) => {
                   const max = Math.max(...stats.dailyData.map(d => d.count), 1);
@@ -144,16 +144,17 @@ export default function AnalyticsPage() {
                       key={i}
                       onClick={() => hasWorkouts && router.push(`/analytics/day/${day.date}`)}
                       disabled={!hasWorkouts}
-                      className={`flex-1 flex flex-col items-center ${hasWorkouts ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}
+                      className="flex-1 flex flex-col items-center"
+                      style={{ cursor: hasWorkouts ? 'pointer' : 'default' }}
                     >
                       <div className="w-full relative" style={{ height: '100px' }}>
                         <div 
-                          className={`absolute bottom-0 w-full rounded-t-md transition-all duration-500 ${hasWorkouts ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'}`}
-                          style={{ height: `${height}%`, minHeight: day.count > 0 ? '8px' : '2px' }}
+                          className="absolute bottom-0 w-full rounded-t-md transition-all duration-500"
+                          style={{ height: `${height}%`, minHeight: day.count > 0 ? '8px' : '2px', backgroundColor: hasWorkouts ? 'var(--primary)' : 'var(--surface-container-high)' }}
                         />
                       </div>
-                      <p className="text-[10px] text-muted mt-2">{day.label}</p>
-                      <p className="text-xs font-semibold text-foreground">{day.count}</p>
+                      <p className="text-[10px] mt-2" style={{ color: 'var(--muted)' }}>{day.label}</p>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--foreground)' }}>{day.count}</p>
                     </button>
                   );
                 })}
@@ -161,7 +162,7 @@ export default function AnalyticsPage() {
             </div>
 
             <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-              <h2 className="font-condensed text-sm font-semibold text-muted uppercase tracking-wider mb-4">Muscle Groups</h2>
+              <h2 className="font-condensed text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--muted)' }}>Muscle Groups</h2>
               <div className="space-y-3">
                 {Object.entries(stats.muscleBreakdown)
                   .sort((a, b) => b[1] - a[1])
@@ -170,13 +171,13 @@ export default function AnalyticsPage() {
                     return (
                       <div key={muscle}>
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium text-foreground capitalize">{muscleGroupLabels[muscle as MuscleGroup] || muscle}</span>
-                          <span className="text-xs text-muted">{count} sets</span>
+                          <span className="text-sm font-medium capitalize" style={{ color: 'var(--foreground)' }}>{muscleGroupLabels[muscle as MuscleGroup] || muscle}</span>
+                          <span className="text-xs" style={{ color: 'var(--muted)' }}>{count} sets</span>
                         </div>
-                        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--surface-container-high)' }}>
                           <div 
-                            className="h-full rounded-full bg-primary transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
+                            className="h-full rounded-full"
+                            style={{ width: `${percentage}%`, backgroundColor: 'var(--primary)' }}
                           />
                         </div>
                       </div>
@@ -186,26 +187,26 @@ export default function AnalyticsPage() {
             </div>
 
             <div className="bg-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700/50">
-              <h2 className="font-condensed text-sm font-semibold text-muted uppercase tracking-wider mb-4">Top Exercises</h2>
+              <h2 className="font-condensed text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--muted)' }}>Top Exercises</h2>
               <div className="space-y-3">
                 {topExercises.map(([name, volume], i) => {
                   const maxVol = topExercises[0]?.[1] || 1;
                   const percentage = (volume / maxVol) * 100;
                   return (
                     <div key={name} className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
+                      <span className="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center" style={{ backgroundColor: 'var(--primary)', color: 'var(--on-primary)', opacity: 0.1 }}>
                         {i + 1}
                       </span>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-foreground">{name}</p>
-                        <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-1">
+                        <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{name}</p>
+                        <div className="h-1.5 rounded-full overflow-hidden mt-1" style={{ backgroundColor: 'var(--surface-container-high)' }}>
                           <div 
-                            className="h-full rounded-full bg-cta"
-                            style={{ width: `${percentage}%` }}
+                            className="h-full rounded-full"
+                            style={{ width: `${percentage}%`, backgroundColor: 'var(--primary)' }}
                           />
                         </div>
                       </div>
-                      <span className="text-xs text-muted whitespace-nowrap">
+                      <span className="text-xs whitespace-nowrap" style={{ color: 'var(--muted)' }}>
                         {volume > 1000 ? `${(volume / 1000).toFixed(1)}k` : volume} kg
                       </span>
                     </div>
