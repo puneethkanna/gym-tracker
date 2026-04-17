@@ -1,18 +1,24 @@
 import type { Workout } from './db';
 
 export function exportToCSV(workouts: Workout[]): string {
-  const headers = ['Exercise', 'Sets', 'Reps', 'Duration (min)', 'Weight (kg)', 'Date', 'Gym Tag'];
-  const rows = workouts.map((w) => [
-    w.exercise,
-    w.sets,
-    w.reps,
-    w.duration,
-    w.weight,
-    new Date(w.date).toLocaleDateString(),
-    w.gymTag || '',
-  ]);
-
-  return [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+  const headers = ['Exercise', 'Set', 'Reps', 'Weight (kg)', 'Date', 'Gym Tag', 'Session', 'Duration (min)'];
+  const rows: any[][] = [];
+  workouts.forEach(w => {
+    const dateStr = new Date(w.date).toLocaleDateString();
+    w.setDetails.forEach((set, idx) => {
+      rows.push([
+        w.exercise,
+        idx + 1,
+        set.reps,
+        set.weight,
+        dateStr,
+        w.gymTag || '',
+        w.session,
+        w.duration,
+      ]);
+    });
+  });
+  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
 }
 
 export function exportToJSON(workouts: Workout[]): string {

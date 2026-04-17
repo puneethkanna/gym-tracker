@@ -102,6 +102,10 @@ function WorkoutCard({ workout, onDelete, today, yesterday }: WorkoutCardProps) 
     timeStr = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   }
 
+  const totalSets = workout.setDetails?.length || 0;
+  const firstSet = workout.setDetails[0];
+  const isUniform = totalSets > 0 && workout.setDetails.every(s => s.reps === firstSet.reps && s.weight === firstSet.weight);
+
   const handleDelete = async () => {
     if (confirm('Delete this workout?')) {
       await onDelete(workout.id!);
@@ -121,7 +125,13 @@ function WorkoutCard({ workout, onDelete, today, yesterday }: WorkoutCardProps) 
             <span className="text-[10px]" style={{ color: 'var(--muted)' }}>{timeStr}</span>
             <span className="text-muted-light">•</span>
             <span className="text-xs font-semibold" style={{ color: 'var(--foreground)' }}>
-              {workout.sets}×{workout.reps} @ <span style={{ color: 'var(--primary)' }}>{workout.weight}kg</span>
+              {isUniform ? (
+                <>
+                  {totalSets}×{firstSet.reps} @ <span style={{ color: 'var(--primary)' }}>{firstSet.weight}kg</span>
+                </>
+              ) : (
+                `${totalSets} sets (mixed)`
+              )}
             </span>
           </div>
         </div>
@@ -138,6 +148,17 @@ function WorkoutCard({ workout, onDelete, today, yesterday }: WorkoutCardProps) 
           </svg>
         </button>
       </div>
+
+      {expanded && (
+        <div className="mt-2 pl-4 border-l-2 space-y-1" style={{ borderColor: 'var(--outline-variant)' }}>
+          {workout.setDetails.map((set, idx) => (
+            <div key={idx} className="text-xs flex justify-between" style={{ color: 'var(--muted)' }}>
+              <span>Set {idx + 1}</span>
+              <span>{set.reps} reps × {set.weight}kg</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {showDelete && (
         <div className="mt-2 pt-2 border-t flex justify-end gap-2" style={{ borderColor: 'var(--outline-variant)' }}>

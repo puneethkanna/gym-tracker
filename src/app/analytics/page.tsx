@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
       };
     }
 
-    const totalVolume = workouts.reduce((acc, w) => acc + (w.weight * w.sets * w.reps), 0);
+    const totalVolume = workouts.reduce((acc, w) => acc + w.setDetails.reduce((sum, s) => sum + s.weight * s.reps, 0), 0);
     const exerciseCounts: Record<string, number> = {};
     const muscleCounts: Record<string, number> = {};
     const weeklyWorkouts: Record<string, number> = {};
@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
   const topExercises = useMemo(() => {
     const exerciseVolume: Record<string, number> = {};
     workouts.forEach(w => {
-      const vol = w.weight * w.sets * w.reps;
+      const vol = w.setDetails.reduce((sum, s) => sum + s.weight * s.reps, 0);
       exerciseVolume[w.exercise] = (exerciseVolume[w.exercise] || 0) + vol;
     });
     return Object.entries(exerciseVolume)

@@ -26,25 +26,25 @@ export default function DayAnalyticsContent() {
     return { 1: session1, 2: session2 };
   }, [dayWorkouts]);
 
-  const stats = useMemo(() => {
-    const totalVolume = dayWorkouts.reduce((acc, w) => acc + (w.weight * w.sets * w.reps), 0);
-    const exerciseCounts: Record<string, number> = {};
-    const muscleCounts: Record<string, number> = {};
+   const stats = useMemo(() => {
+     const totalVolume = dayWorkouts.reduce((acc, w) => acc + w.setDetails.reduce((sum, s) => sum + s.weight * s.reps, 0), 0);
+     const exerciseCounts: Record<string, number> = {};
+     const muscleCounts: Record<string, number> = {};
 
-    dayWorkouts.forEach(w => {
-      exerciseCounts[w.exercise] = (exerciseCounts[w.exercise] || 0) + 1;
-      w.muscleGroups.forEach(mg => {
-        muscleCounts[mg] = (muscleCounts[mg] || 0) + 1;
-      });
-    });
+     dayWorkouts.forEach(w => {
+       exerciseCounts[w.exercise] = (exerciseCounts[w.exercise] || 0) + 1;
+       w.muscleGroups.forEach(mg => {
+         muscleCounts[mg] = (muscleCounts[mg] || 0) + 1;
+       });
+     });
 
-    return {
-      totalWorkouts: dayWorkouts.length,
-      totalVolume,
-      exerciseCounts,
-      muscleCounts,
-    };
-  }, [dayWorkouts]);
+     return {
+       totalWorkouts: dayWorkouts.length,
+       totalVolume,
+       exerciseCounts,
+       muscleCounts,
+     };
+   }, [dayWorkouts]);
 
   const formattedDate = useMemo(() => {
     const d = new Date(date + 'T12:00:00');
@@ -204,6 +204,10 @@ export default function DayAnalyticsContent() {
 function DayWorkoutItem({ workout }: { workout: Workout }) {
   const [expanded, setExpanded] = useState(false);
 
+  const totalSets = workout.setDetails?.length || 0;
+  const firstSet = workout.setDetails[0];
+  const isUniform = totalSets > 0 && workout.setDetails.every(s => s.reps === firstSet.reps && s.weight === firstSet.weight);
+
   return (
     <div 
       className="rounded-lg p-2 transition-colors cursor-pointer"
@@ -213,16 +217,32 @@ function DayWorkoutItem({ workout }: { workout: Workout }) {
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{workout.exercise}</span>
         <span className="text-xs font-semibold" style={{ color: 'var(--foreground)' }}>
-          {workout.sets}×{workout.reps} @ {workout.weight}kg
+          {isUniform ? (
+            <>
+              {totalSets}×{firstSet.reps} @ {firstSet.weight}kg
+            </>
+          ) : (
+            `${totalSets} sets (mixed)`
+          )}
         </span>
       </div>
-      {expanded && workout.muscleGroups.length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-1">
-          {workout.muscleGroups.map((mg: string) => (
-            <span key={mg} className="text-[10px] px-1.5 py-0.5 rounded capitalize" style={{ backgroundColor: 'var(--surface-container-high)', color: 'var(--muted)' }}>
-              {mg}
-            </span>
+      {expanded && (
+        <div className="mt-2 space-y-1">
+          {workout.setDetails.map((set, idx) => (
+            <div key={idx} className="text-xs flex justify-between" style={{ color: 'var(--muted)' }}>
+              <span>Set {idx + 1}</span>
+              <span>{set.reps} reps × {set.weight}kg</span>
+            </div>
           ))}
+          {workout.muscleGroups.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {workout.muscleGroups.map((mg: string) => (
+                <span key={mg} className="text-[10px] px-1.5 py-0.5 rounded capitalize" style={{ backgroundColor: 'var(--surface-container-high)', color: 'var(--muted)' }}>
+                  {mg}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

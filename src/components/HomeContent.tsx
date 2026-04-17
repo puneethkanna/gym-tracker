@@ -47,7 +47,7 @@ export default function HomeContent() {
   }, [workouts]);
 
   const totalVolume = useMemo(() => {
-    return workouts.reduce((acc, w) => acc + (w.weight * w.sets * w.reps), 0);
+    return workouts.reduce((acc, w) => acc + w.setDetails.reduce((sum, s) => sum + s.weight * s.reps, 0), 0);
   }, [workouts]);
 
   const streak = useMemo(() => {

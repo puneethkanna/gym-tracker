@@ -11,9 +11,8 @@ interface WorkoutFormProps {
 export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
   const { addWorkout } = useWorkouts();
   const [exercise, setExercise] = useState('');
-  const [sets, setSets] = useState('');
-  const [reps, setReps] = useState('');
-  const [weight, setWeight] = useState('');
+  const [numSets, setNumSets] = useState('');
+  const [setEntries, setSetEntries] = useState<Array<{ reps: string; weight: string }>>([]);
   const [gymTag, setGymTag] = useState('');
   const [workoutDate, setWorkoutDate] = useState(new Date().toISOString().split('T')[0]);
   const [session, setSession] = useState(1);
@@ -23,6 +22,23 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredExercises, setFilteredExercises] = useState(exerciseLibrary.slice(0, 10));
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Sync setEntries length with numSets
+  useEffect(() => {
+    const count = parseInt(numSets) || 0;
+    setSetEntries(prev => {
+      if (count > prev.length) {
+        const newEntries = [...prev];
+        for (let i = prev.length; i < count; i++) {
+          newEntries.push({ reps: '', weight: '' });
+        }
+        return newEntries;
+      } else if (count < prev.length) {
+        return prev.slice(0, count);
+      }
+      return prev;
+    });
+  }, [numSets]);
 
   useEffect(() => {
     if (exercise.trim()) {
@@ -52,6 +68,12 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
     return found?.muscleGroups || [];
   };
 
+  const updateSetEntry = (index: number, field: 'reps' | 'weight', value: string) => {
+    setSetEntries(prev => prev.map((entry, i) => 
+      i === index ? { ...entry, [field]: value } : entry
+    ));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -64,22 +86,24 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
         return;
       }
 
+      const setDetails = setEntries.map(entry => ({
+        reps: parseInt(entry.reps) || 0,
+        weight: parseFloat(entry.weight) || 0,
+      }));
+
       await addWorkout({
         exercise: exercise.trim(),
         muscleGroups: getExerciseMuscleGroups(exercise.trim()),
-        sets: parseInt(sets) || 0,
-        reps: parseInt(reps) || 0,
+        setDetails,
         duration: 0,
-        weight: parseFloat(weight) || 0,
         date: new Date(workoutDate + 'T' + new Date().toTimeString().slice(0,8)),
         gymTag: gymTag.trim() || undefined,
         session,
       });
 
       setExercise('');
-      setSets('');
-      setReps('');
-      setWeight('');
+      setNumSets('');
+      setSetEntries([]);
       setGymTag('');
       setWorkoutDate(new Date().toISOString().split('T')[0]);
       setSession(1);
@@ -145,13 +169,14 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
           )}
         </div>
         
-        <div className="grid grid-cols-3 gap-2">
+        <div className="space-y-3">
+          {/* Number of Sets input */}
           <div className="relative">
             <input
               type="number"
               inputMode="numeric"
-              value={sets}
-              onChange={(e) => setSets(e.target.value)}
+              value={numSets}
+              onChange={(e) => setNumSets(e.target.value)}
               placeholder="0"
               className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
               style={{ 
@@ -162,38 +187,44 @@ export function WorkoutForm({ onSuccess }: WorkoutFormProps) {
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>sets</span>
           </div>
-          <div className="relative">
-            <input
-              type="number"
-              inputMode="numeric"
-              value={reps}
-              onChange={(e) => setReps(e.target.value)}
-              placeholder="0"
-              className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
-              style={{ 
-                backgroundColor: 'var(--surface-container-high)', 
-                border: '1px solid var(--outline)',
-                color: 'var(--foreground)'
-              }}
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>reps</span>
-          </div>
-          <div className="relative">
-            <input
-              type="number"
-              inputMode="decimal"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              placeholder="0"
-              className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
-              style={{ 
-                backgroundColor: 'var(--surface-container-high)', 
-                border: '1px solid var(--outline)',
-                color: 'var(--foreground)'
-              }}
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>kg</span>
-          </div>
+
+          {/* Per-set reps & weight inputs */}
+          {setEntries.map((entry, index) => (
+            <div key={index} className="grid grid-cols-2 gap-2">
+              <div className="relative">
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  value={entry.reps}
+                  onChange={(e) => updateSetEntry(index, 'reps', e.target.value)}
+                  placeholder="reps"
+                  className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--surface-container-high)', 
+                    border: '1px solid var(--outline)',
+                    color: 'var(--foreground)'
+                  }}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>reps</span>
+              </div>
+              <div className="relative">
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  value={entry.weight}
+                  onChange={(e) => updateSetEntry(index, 'weight', e.target.value)}
+                  placeholder="kg"
+                  className="w-full px-3 py-3 rounded-xl text-center text-lg font-bold cursor-pointer transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--surface-container-high)', 
+                    border: '1px solid var(--outline)',
+                    color: 'var(--foreground)'
+                  }}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-wide pointer-events-none" style={{ color: 'var(--muted)' }}>kg</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         <button

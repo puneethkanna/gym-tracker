@@ -90,10 +90,8 @@ export interface Workout {
   id?: number;
   exercise: string;
   muscleGroups: MuscleGroup[];
-  sets: number;
-  reps: number;
+  setDetails: { reps: number; weight: number }[];
   duration: number;
-  weight: number;
   date: Date;
   gymTag?: string;
   session: number;
@@ -155,6 +153,36 @@ db.version(4).stores({
       workout.session = Math.random() < 0.5 ? 1 : 2;
     }
   });
+});
+
+db.version(5).stores({
+  workouts: '++id, exercise, date, gymTag, session',
+  palettes: '++id, name, isDefault',
+  gyms: '++id, name',
+}).upgrade(async (tx) => {
+  const workouts = await tx.table('workouts').toArray();
+  for (const w of workouts) {
+    // Skip if already migrated
+    if ((w as any).setDetails) continue;
+    const old = w as any;
+    if (typeof old.sets === 'number' && typeof old.reps === 'number' && typeof old.weight === 'number') {
+      const setDetails = Array.from({ length: old.sets }, () => ({
+        reps: old.reps,
+        weight: old.weight,
+      }));
+      // Replace the record to remove old fields
+      await tx.table('workouts').put({
+        id: w.id,
+        exercise: w.exercise,
+        muscleGroups: w.muscleGroups,
+        setDetails,
+        duration: w.duration,
+        date: w.date,
+        gymTag: w.gymTag,
+        session: w.session,
+      });
+    }
+  }
 });
 
 export const defaultPalettes: Palette[] = [
