@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "export": "next build && next export && touch out/.nojekyll",
+    "export": "next build && touch out/.nojekyll",
     "deploy": "npm run export && git add out && git commit -m \"Deploy to GitHub Pages\" && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
