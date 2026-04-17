@@ -111,7 +111,7 @@ export default function DayAnalyticsContent() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'session' | 'exercise')}
-                  className="text-xs px-2 py-1 rounded-lg cursor-pointer"
+                  className="text-xs px-2 py-1 rounded-lg cursor-pointer bg-transparent"
                   style={{ backgroundColor: 'var(--surface-container-high)', border: '1px solid var(--outline)', color: 'var(--foreground)' }}
                 >
                   <option value="session">By Session</option>

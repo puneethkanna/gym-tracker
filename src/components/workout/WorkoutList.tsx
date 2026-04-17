@@ -51,7 +51,7 @@ export function WorkoutList({ today, yesterday }: WorkoutListProps) {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as 'date' | 'exercise')}
-          className="text-xs px-2 py-1 rounded-lg cursor-pointer"
+          className="text-xs px-2 py-1 rounded-lg cursor-pointer bg-transparent"
           style={{ 
             backgroundColor: 'var(--surface-container-high)', 
             border: '1px solid var(--outline-variant)',
@@ -63,7 +63,7 @@ export function WorkoutList({ today, yesterday }: WorkoutListProps) {
         </select>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-0">
         {sortedWorkouts.slice(0, 10).map((workout) => (
           <WorkoutCard key={workout.id} workout={workout} onDelete={deleteWorkout} today={today} yesterday={yesterday} />
         ))}

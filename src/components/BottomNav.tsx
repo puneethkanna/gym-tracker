@@ -41,7 +41,7 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t" style={{ backgroundColor: 'var(--surface-container)', borderColor: 'var(--outline-variant)' }}>
       <div className="flex justify-around items-center h-16 max-w-md mx-auto">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname === `/gym-tracker${item.href}`;
+          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`) || pathname === `/gym-tracker${item.href}` || pathname.startsWith(`/gym-tracker${item.href}/`);
           return (
             <Link
               key={item.href}
